@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-4">ფილმების სია</h1>
+    </div>
+  </div>
+
+  <div class="container my-4">
+    <div class="row">
+      {% for film in films %}
+        <div class="col-md-4">
+          <div class="card">
+<!--            <img src="{{ film.image }}" class="card-img-top" alt="{{ film.name }}">-->
+            <div class="card-body">
+              <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
+              <p class="card-text">{{ film.description }}</p>
+              <p>Rated: {{ film.rate }}</p>
+              <a href="{{ url_for('list_films', film_id=film.id) }}" class="btn btn-primary">ნახეთ ფილმის განხილვები</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

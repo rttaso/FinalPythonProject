@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+     h2 {
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: green;
+
+        }
+</style>
+           <div class="container">
+        <h2 class="profile-info">სალამი, {{ current_user.username }}!</h2>
+
+        <div class="profile-info">
+            <form method="post" action="{{ url_for('profile') }}">
+                {{ form.hidden_tag() }}
+
+                <div class="form-group">
+                    <label>შეიყვანეთ თქვენი ფავორიტი ფილმი:</label>
+                    {{ form.filmName(class="form-control", placeholder="ფილმის სახელი", required=true) }}
+                </div>
+
+                <button type="submit" class="btn btn-success">შეყვანა</button>
+            </form>
+        </div>
+           </div>
+
+
+{% endblock %}
