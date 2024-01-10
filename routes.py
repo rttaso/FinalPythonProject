@@ -97,6 +97,7 @@ def register():
         existing_user = User.query.filter(User.username == form.username.data).first()
         if existing_user:
             flash("სახელი დაკავებულია.")
+            return redirect("/signup")
         else:
             user = User(username=form.username.data, password=form.password.data)
             db.session.add(user)
@@ -117,6 +118,7 @@ def signin():
 
         if user and user.check_password(form.password.data):
             login_user(user)
+            return redirect("/")
         else:
             flash('არასწორი სახელი ან პაროლი.', 'danger')
 
