@@ -1,27 +1,47 @@
+
 {% extends "base.html" %}
-
 {% block content %}
-  <div class="jumbotron">
-    <div class="container">
-      <h1 class="display-4">ფილმების სია</h1>
-    </div>
+<div class="jumbotron bg-dark text-white">
+  <div class="container", style="height:50px">
+    <h1 class="display-4">ფილმებისა და სერიალების პლატფორმა</h1>
   </div>
+</div>
 
-  <div class="container my-4">
-    <div class="row">
-      {% for film in films %}
-        <div class="col-md-4">
-          <div class="card">
-<!--            <img src="{{ film.image }}" class="card-img-top" alt="{{ film.name }}">-->
-            <div class="card-body">
-              <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
-              <p class="card-text">{{ film.description }}</p>
-              <p>Rated: {{ film.rate }}</p>
-              <a href="{{ url_for('list_films', film_id=film.id) }}" class="btn btn-primary">ნახეთ ფილმის განხილვები</a>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+<div class="container my-4">
+  <h2 class="mb-4">იპოვეთ ფილმი</h2>
+  <form method="POST" action="{{ url_for('search') }}" class="mb-4">
+    <label for="search_query" class="form-label text-white">ჩაწერეთ სახელი:</label>
+    <div class="input-group">
+      <input type="text" id="search_query" name="search_query" class="form-control" required>
+      <button type="submit" class="btn btn-primary">ძებნა</button>
     </div>
+  </form>
+
+  {% if films %}
+  <ul class="list-unstyled">
+    {% for film in films %}
+    <li class="mb-3 text-white">
+      <strong>{{ film.name }}</strong> ({{ film.year }}) - Rated: {{ film.rate }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+
+<div class="container my-4">
+  <h2 class="mb-4 ">პოპულარული ფილმები</h2>
+  <div class="row">
+    {% for film in films %}
+    <div class="col-md-4 mb-4">
+      <div class="card bg-dark text-white">
+        <img src="{{ film.image }}" class="card-img-top" alt="{{ film.name }} " style="max-height: 600px;">
+        <div class="card-body">
+          <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
+<a href="{{ url_for('view_film', film_id=film.id) }}" class="btn btn-primary">ნახეთ ფილმის განხილვები</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
   </div>
+</div>
 {% endblock %}

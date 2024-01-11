@@ -1,14 +1,17 @@
-from form import RateFilm, SignInForm, SignUpForm, FavFilm
+from os import path
+
+from werkzeug.utils import secure_filename
+from form import RateFilm, SignInForm, SignUpForm, FavFilm, CommentForm
 from flask import render_template, request, redirect, flash, url_for
 from extensions import app
-from models import FilmList, db, User, Film
+from models import FilmList, db, User, Film, Comment
 from flask_login import login_user, logout_user, login_required, current_user
 
 
 films = [
-    {"name": "Pulp Fiction", "year": 1994, "rate": 5, "image": "/static/pulp_fiction.jpg"},
-    {"name": "Black Swan", "year": 2010, "rate": 5, "image": "/static/MV5BNzY2NzI4OTE5MF5BMl5BanBnXkFtZTcwMjMyNDY4Mw@@._V1_.jpg"},
-    {"name": "A Clockwork Orange", "year": 1971, "rate": 4, "image": "/static/orange.jpg"},
+    {"id": 1, "name": "Pulp Fiction", "year": 1994, "rate": 5, "image": "/static/pulp_fiction.jpg"},
+    {"id": 2,"name": "Black Swan", "year": 2010, "rate": 5, "image": "/static/MV5BNzY2NzI4OTE5MF5BMl5BanBnXkFtZTcwMjMyNDY4Mw@@._V1_.jpg"},
+    {"id": 3,"name": "A Clockwork Orange", "year": 1971, "rate": 4, "image": "/static/orange.jpg"},
 ]
 
 
@@ -34,15 +37,31 @@ def rate_film():
     form = RateFilm()
 
     if form.validate_on_submit():
+        file = form.image.data
+        filename = file.filename
+        file.save((path.join(app.root_path, 'static', filename)))
         new_film = FilmList(
             name=form.name.data,
             year=form.year.data,
             rate=form.rate.data,
+            image_filename=filename
         )
+
         db.session.add(new_film)
         db.session.commit()
 
     return render_template("rate.html", form=form)
+
+
+@app.route("/view_film/<int:film_id>")
+def view_film(film_id):
+    form = CommentForm()
+    film = FilmList.query.get(film_id)
+
+    if not film:
+        return redirect("/404")
+
+    return render_template("view_film.html", film=film, form=form)
 
 
 @app.route("/edit_film/<int:film_id>", methods=['GET', 'POST'])
@@ -118,7 +137,6 @@ def signin():
 
         if user and user.check_password(form.password.data):
             login_user(user)
-            return redirect("/")
         else:
             flash('არასწორი სახელი ან პაროლი.', 'danger')
 
@@ -144,3 +162,19 @@ def profile():
         return redirect("/")
 
     return render_template("profile.html", form=form)
+
+
+@app.route('/add_comment/<int:film_id>', methods=['POST'])
+@login_required
+def add_comment(film_id):
+    film = FilmList.query.get_or_404(film_id)
+    form = CommentForm()
+
+    if form.validate_on_submit():
+        content = form.content.data
+        comment = Comment(content=content, user=current_user, film=film)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('view_film', film_id=film.id))
+
+    return render_template('view_film.html', film=film, form=form)

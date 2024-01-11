@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container my-4">
+    <div class="card bg-dark text-white">
+      <img src="{{ film.image_filename }}" class="card-img-top" alt="{{ film.name }}"  style="max-width: 100%; max-height: 600px;">
+      <div class="card-body">
+        <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
+        <p class="card-text">შეფასება: {{ film.rate }}/5</p>
+{% if film.id == 1 %}
+        <a>აღწერა: ერთხელ ბუჩ კულიჯმა გადაწყვიტა თვით მარსელას უოლესის გაცურება. თუმცა ლოს–ანჟელესში იყო ბევრი უფრო ადვიი გზა
+          სიცოცხლესათან დასამშვიდებლად. გააფთრებული მარსელასმა დიდ ხანს არ ალოდინა; ორი თავზეხელაღებული, ვინცენტი და ჯულისი დაკავფდნენ თავხედის ბედით.
+          ამ ახალგაზრდებს თითქმის ყოველთვის უამრავი სამსახური აქვთ, მაგრამ მათ ყველაფერი და ყოველთვის ბოლომდე მიყავთ .... </a>
+        {%endif%}
+                {% if film.id == 2 %}
+        <a>აღწერა: მოქმედება ვითარდება ნიუ-იორკის ერთ-ერთ პრესტიჟულ საბალეტო სტუდიაში წამყვანი ბალერინას, ნინას, გარშემო.
+          მან გედების ტბაში მთავარი როლი უნდა შეასრულოს, თუმცა კონკურენტი გამოუჩნდება ლილის სახით. ორ ბალერინას შორის დაძაბულობა
+          მატულობს პრემიერის მოახლოებასთან ერთად. </a>
+        {%endif%}
+                {% if film.id == 3 %}
+        <a>აღწერა: მომავლის საზოგადოება. ხულიგნების ბანდის ლიდერს ფსიქიური გადახრა აქვს სექსზე და ძალადობაზე, რისთვისაც ციხეში აღმოჩნდება.
+          როდესაც გაათავისუფლებენ მას ყველა ძველი ნაცნობი სასტიკად უსწორდება... </a>
+        {% endif%}
+      </div>
+    </div>
+
+   <div class="mt-4">
+      <h3>კომენტარები</h3>
+      {% for comment in film.comments %}
+        <p>{{ comment.content }}</p>
+        <small>კომენტარის ავტორი: {{ comment.user.username }}</small>
+        <hr>
+      {% endfor %}
+   {% if current_user.is_authenticated %}
+      <form method="post" action="{{ url_for('add_comment', film_id=film.id) }}">
+        {{ form.csrf_token }}
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+          {{ form.content.label }}
+          {{ form.content(class="form-control", rows="3") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    {% else %}
+      <p>გაიარეთ აუტორიზაცია.</p>
+    {% endif %}
+  </div>
+  </div>
+{% endblock %}

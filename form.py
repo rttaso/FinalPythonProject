@@ -31,3 +31,9 @@ class FavFilm(FlaskForm):
     submit = SubmitField('არჩევა')
 
 
+class CommentForm(FlaskForm):
+    content = TextAreaField('განხილვა', validators=[DataRequired()])
+    submit = SubmitField('დაპოსტვა')
+
+
+
