@@ -22,7 +22,7 @@
               <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
               <p class="card-text">{{ film.description }}</p>
               <p>Rated: {{ film.rate }}</p>
-              <a class="btn btn-primary">ნახეთ ფილმის განხილვები</a>
+<a href="{{ url_for('view_film', film_id=film.id) }}" class="btn btn-primary">ნახეთ ფილმის განხილვები</a>
             </div>
           </div>
         </div>
