@@ -9,6 +9,7 @@ class RateFilm(FlaskForm):
     name = StringField("სახელი", validators=[DataRequired()])
     year = IntegerField("გამოშვების წელი", validators=[DataRequired()])
     rate = IntegerField("შეფასება", validators=[DataRequired(), NumberRange(min=0, max=5)])
+    image = FileField("ფოტო", validators=[DataRequired()])
     hidden_field = HiddenField()
     submit = SubmitField("დამატება")
 
