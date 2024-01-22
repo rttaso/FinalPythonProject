@@ -3,10 +3,10 @@
   <div class="container my-4">
     <div class="card bg-dark text-white">
         {% if film.id < 4 %}
-      <img src="{{ film.image_filename }}" class="card-img-top" alt="{{ film.name }}"  style="max-width: 100%; max-height: 600px;">
+      <img src="{{ film.image_filename }}" class="card-img-top" alt="{{ film.name }}" style="max-width: 200px; max-height: auto;  display: block; margin: 0 auto;">
       {% else %}
-         <img src="/static/{{ film.image_filename }}" class="card-img-top" alt="{{ film.name }}"  style="max-width: 100%; max-height: 600px;">
-        {%endif%}
+         <img src="/static/{{ film.image_filename }}" class="card-img-top " alt="{{ film.name }}" style="max-width: 200px; max-height: auto;  display: block; margin: 0 auto;">
+         {%endif%}
         <div class="card-body">
         <h5 class="card-title">{{ film.name }} ({{ film.year }})</h5>
         <p class="card-text">შეფასება: {{ film.rate }}/5</p>

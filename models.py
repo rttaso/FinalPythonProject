@@ -22,6 +22,7 @@ class User(db.Model, BaseModel, UserMixin):
     password = db.Column(db.String)
     role = db.Column(db.String)
 
+
     def __init__(self, username, password, role="guest"):
         self.username = username
         self.password = generate_password_hash(password)
